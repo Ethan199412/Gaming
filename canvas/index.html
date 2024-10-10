@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Moving Circles</title>
+    <style>
+        canvas {
+            border: 5px solid #666;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="myCanvas" width="600" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById('myCanvas');
+        const ctx = canvas.getContext('2d');
+        const circles = [];
+        const numCircles = 10;
+        const circleRadius = 20;
+
+        // Create random circles
+        for (let i = 0; i < numCircles; i++) {
+            let circle = {
+                x: Math.random() * (canvas.width - 2 * circleRadius) + circleRadius,
+                y: Math.random() * (canvas.height - 2 * circleRadius) + circleRadius,
+                dx: (Math.random() - 0.5) * 4,  // Random horizontal speed
+                dy: (Math.random() - 0.5) * 4,  // Random vertical speed
+                radius: circleRadius,
+                color: getRandomColor()
+            };
+            circles.push(circle);
+        }
+
+        // Helper function to generate random colors
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        // Draw a circle
+        function drawCircle(circle) {
+            ctx.beginPath();
+            ctx.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2, false);
+            ctx.fillStyle = circle.color;
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        // Detect collisions between circles
+        function detectCollision(circle1, circle2) {
+            const dx = circle1.x - circle2.x;
+            const dy = circle1.y - circle2.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            return distance < circle1.radius + circle2.radius;
+        }
+
+        // Update circle position and handle collisions
+        function updateCircles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < circles.length; i++) {
+                let circle = circles[i];
+
+                // Bounce off the edges of the canvas
+                if (circle.x + circle.radius > canvas.width || circle.x - circle.radius < 0) {
+                    circle.dx = -circle.dx;
+                }
+                if (circle.y + circle.radius > canvas.height || circle.y - circle.radius < 0) {
+                    circle.dy = -circle.dy;
+                }
+
+                // Move the circle
+                circle.x += circle.dx;
+                circle.y += circle.dy;
+
+                // Check for collisions with other circles
+                for (let j = i + 1; j < circles.length; j++) {
+                    let otherCircle = circles[j];
+                    if (detectCollision(circle, otherCircle)) {
+                        // Exchange velocities for a simple collision response
+                        let tempDx = circle.dx;
+                        let tempDy = circle.dy;
+                        circle.dx = otherCircle.dx;
+                        circle.dy = otherCircle.dy;
+                        otherCircle.dx = tempDx;
+                        otherCircle.dy = tempDy;
+                    }
+                }
+
+                drawCircle(circle);
+            }
+        }
+
+        // Animate the circles
+        function animate() {
+            updateCircles();
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
