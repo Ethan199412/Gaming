@@ -10,7 +10,8 @@ import './app.less'
 import battleManager, { GamingEntity, Strategy } from './gamingClass/gamingEntity'
 
 
-const strategies = [Strategy.Eagle, Strategy.Pigeon, Strategy.Random, Strategy.TitForTat];
+// const strategies = [Strategy.Eagle, Strategy.Pigeon, Strategy.Random, Strategy.TitForTat];
+const strategies = [Strategy.Eagle, Strategy.Eagle, Strategy.Eagle, Strategy.Pigeon, Strategy.TitForTat, Strategy.TitForTat, Strategy.TitForTat];
 
 function generateEntities(stategies: Strategy[]) {
     const entities: GamingEntity[] = []
@@ -22,13 +23,13 @@ function generateEntities(stategies: Strategy[]) {
 const entities = generateEntities(strategies)
 const competitors = generateEntities(strategies)
 
-for(const entity1 of entities){
-    for(const entity2 of competitors){
+for (const entity1 of entities) {
+    for (const entity2 of competitors) {
         battleManager.battle(entity1, entity2, 20)
     }
 }
 
-for(const entity1 of entities){
+for (const entity1 of entities) {
     console.log(entity1.strategy, entity1.getAllScore())
 }
 

@@ -16,20 +16,31 @@
 </head>
 
 <body>
-    <canvas id="myCanvas" width="800" height="400"></canvas>
+    <canvas id="myCanvas" width="400" height="300"></canvas>
     <script>
         const canvas = document.getElementById('myCanvas');
         const ctx = canvas.getContext('2d');
         const circleRadius = 20
 
-        const circle = {
-            x: Math.random() * (canvas.width - 2 * circleRadius) + circleRadius,
-            y: Math.random() * (canvas.height - 2 * circleRadius) + circleRadius,
-            dx: (Math.random() - 0.5) * 5,  // Random horizontal speed
-            dy: (Math.random() - 0.5) * 5,  // Random vertical speed
-            radius: circleRadius,
-            color: getRandomColor()
-        };
+        function genCircle() {
+            return {
+                x: Math.random() * (canvas.width - 2 * circleRadius) + circleRadius,
+                y: Math.random() * (canvas.height - 2 * circleRadius) + circleRadius,
+                dx: (Math.random() - 0.5) * 5,  // Random horizontal speed
+                dy: (Math.random() - 0.5) * 5,  // Random vertical speed
+                radius: circleRadius,
+                color: getRandomColor()
+            };
+        }
+
+        function genCircles(n) {
+            const circles = []
+            for (let i = 0; i < n; i++) {
+                circles.push(genCircle())
+            }
+            return circles
+        }
+        const circles = genCircles(10)
 
         function getRandomColor() {
             const letters = '0123456789ABCDEF';
@@ -48,25 +59,73 @@
             ctx.closePath();
         }
 
-        function updateCircle(circle) {
+        function detectCollision(circle1, circle2) {
+            const { x: c1x, y: c1y, radius: c1Radius } = circle1
+            const { x: c2x, y: c2y, radius: c2Radius } = circle2
+
+            const distance = (Math.abs(c1x - c2x) ** 2 + Math.abs(c1y - c2y) ** 2) ** 0.5
+
+            if (distance <= c1Radius + c2Radius) {
+                return true
+            }
+            return false
+        }
+
+        function updateCircles(circles) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            // console.log('[p1.0] circle', circle)
-            let { x, y, dx, dy, radius } = circle
-            if (x + radius >= canvas.width || x - radius <= 0) {
-                dx = -dx
-            }
+            for (let i = 0; i < circles.length; i++) {
+                const circle = circles[i]
+                // console.log('[p1.0] circle', circle)
+                let { x, y, dx, dy, radius } = circle
+                if (x + radius >= canvas.width || x - radius <= 0) {
+                    dx = -dx
+                }
 
-            if (y + radius >= canvas.height || y - radius <= 0) {
-                dy = -dy
-            }
+                if (y + radius >= canvas.height || y - radius <= 0) {
+                    dy = -dy
+                }
 
-            x += dx
-            y += dy
-            circle.x = x
-            circle.y = y
-            circle.dx = dx
-            circle.dy = dy
-            drawCircle({ ...circle })
+                x += dx
+                y += dy
+                circle.x = x
+                circle.y = y
+                circle.dx = dx
+                circle.dy = dy
+
+                for (let j = i + 1; j < circles.length; j++) {
+                    const otherCircle = circles[j]
+                    if (detectCollision(circle, otherCircle)) {
+                        let { dx: c1dx, dy: c1dy, radius } = circle
+                        let { dx: c2dx, dy: c2dy } = otherCircle
+
+                        if (Math.abs(c1dx - c2dx) < 0.1) {
+                            if (x + 2 * radius <= canvas.width) {
+                                x += 2 * radius
+                                circle.x = x
+                            }
+                        }
+
+                        if (Math.abs(c1dy - c2dy) < 0.1) {
+                            if (y + 2 * radius <= canvas.height) {
+                                y += 2 * radius
+                                circle.y = y
+                            }
+                        }
+
+                        // if (Math.abs(c1dy - c2dy) < 0.01) {
+                        //     c1dy += 0.1
+                        //     c2dy -= 0.1
+                        // }
+
+                        circle.dx = c2dx
+                        circle.dy = c2dy
+
+                        otherCircle.dx = c1dx
+                        otherCircle.dy = c2dy
+                    }
+                }
+                drawCircle({ ...circle })
+            }
         }
 
         // drawCircle(circle)
@@ -75,7 +134,7 @@
             // if (i > 3) {
             //     return
             // }
-            updateCircle(circle)
+            updateCircles(circles)
             requestAnimationFrame(animate)
             i++
         }
