@@ -6,12 +6,12 @@ import axios from 'axios'
 // import 'antd/dist/antd.css';
 import { Button, Input } from 'antd'
 import './app.less'
-
-import battleManager, { GamingEntity, Strategy } from './gamingClass/gamingEntity'
-
+import { Strategy } from './gaming/types'
+import { GamingEntity } from './gaming/GamingEntity'
+import battleManager from './gaming/BattleManager'
 
 // const strategies = [Strategy.Eagle, Strategy.Pigeon, Strategy.Random, Strategy.TitForTat];
-const strategies = [Strategy.Eagle, Strategy.Eagle, Strategy.Eagle, Strategy.Pigeon, Strategy.TitForTat, Strategy.TitForTat, Strategy.TitForTat];
+const strategies = [Strategy.Eagle, Strategy.Eagle, Strategy.NeverForgive, Strategy.Pigeon, Strategy.TitForTat, Strategy.TitForTat, Strategy.TitForTat];
 
 function generateEntities(stategies: Strategy[]) {
     const entities: GamingEntity[] = []

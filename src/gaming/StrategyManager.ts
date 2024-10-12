@@ -1,10 +1,16 @@
-import { Action, Strategy } from "./gamingEntity";
+import { GamingEntity } from "./gamingEntity";
+import { Action, Strategy } from "./types";
+
+interface IOptions {
+    competitorActions?: Action[],
+    heFucksMe?: boolean,
+    me: GamingEntity,
+    competitor: GamingEntity
+}
 
 class StrategyManager {
-    generateNextAction(strategy: Strategy, competitorActions: Action[]) {
-        // if(strategy == Strategy.TitForTat){
-        //     console.log('[p1.4] competitorActions', competitorActions)
-        // }
+    generateNextAction(strategy: Strategy, options: IOptions) {
+        const { competitorActions, heFucksMe, me, competitor } = options
         switch (strategy) {
             case Strategy.Eagle:
                 return Action.Fight;
@@ -18,6 +24,11 @@ class StrategyManager {
                     return competitorActions[competitorActions.length - 1]
                 }
                 return Action.Cooperate;
+            case Strategy.NeverForgive:
+                if (heFucksMe) {
+                    return Action.Fight
+                }
+                return Action.Cooperate
         }
     }
 }
