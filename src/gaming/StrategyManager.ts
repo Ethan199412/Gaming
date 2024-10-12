@@ -1,16 +1,20 @@
 import { GamingEntity } from "./gamingEntity";
-import { Action, Strategy } from "./types";
+import { Action, Score, Strategy } from "./types";
 
 interface IOptions {
-    competitorActions?: Action[],
-    heFucksMe?: boolean,
+    // competitorActions?: Action[],
+    // heFucksMe?: boolean,
     me: GamingEntity,
     competitor: GamingEntity
 }
 
 class StrategyManager {
     generateNextAction(strategy: Strategy, options: IOptions) {
-        const { competitorActions, heFucksMe, me, competitor } = options
+        const { me, competitor } = options
+        const competitorActions = competitor.actionMappings[me.id]
+        const heFucksMe = me.heFucksMeMappings[competitor.id]
+        const myScore = me.scoreMappings[competitor.id]
+
         switch (strategy) {
             case Strategy.Eagle:
                 return Action.Fight;
@@ -29,6 +33,14 @@ class StrategyManager {
                     return Action.Fight
                 }
                 return Action.Cooperate
+            case Strategy.CunningProber:
+                const { length } = myScore
+                if (length >= 2) {
+                    if (myScore[length - 1] == Score.BothLose && myScore[length - 2] == Score.BothLose) {
+                        return Action.Cooperate
+                    }
+                }
+                return Action.Fight
         }
     }
 }

@@ -8,7 +8,8 @@ export enum Strategy {
     Pigeon = 'PIGEON',
     Random = 'RANDOM',
     TitForTat = 'TIT_FOR_TAT',
-    NeverForgive = 'NEVER_FORGIVE'
+    NeverForgive = 'NEVER_FORGIVE',
+    CunningProber = 'CUNNING_PROBER'
 }
 
 export enum Score {

@@ -37,8 +37,10 @@ export class GamingEntity {
         const competitorActions: Action[] = this.competitorMappings[competitorId].actionMappings[this.id]
         const action = strategyManager.generateNextAction(this.strategy,
             {
-                competitorActions,
-                heFucksMe: this.heFucksMeMappings[competitorId]
+                // competitorActions,
+                // heFucksMe: this.heFucksMeMappings[competitorId],
+                me: this,
+                competitor: this.competitorMappings[competitorId]
             }
         )
         // this.actionMappings[competitorId].push(action)
