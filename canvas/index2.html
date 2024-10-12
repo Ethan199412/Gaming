@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #myCanvas {
+            /* width: 600px;
+            height: 600px; */
+            border: 3px solid #666
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="myCanvas" width="600" height="400"></canvas>
+    <script>
+        // 获取canvas画布和context
+        const canvas = document.getElementById('myCanvas')
+        const ctx = canvas.getContext('2d')
+
+        // 封装一个小球类
+        class Ball {
+            constructor(x, y, radius) {
+                this.x = x
+                this.y = y
+                this.radius = radius
+                this.angle = Math.random() * 180
+                this.speed = 3
+                this.flag = false
+            }
+
+            draw(ctx) {
+                ctx.beginPath()
+                ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI)
+                ctx.closePath()
+                ctx.fillStyle = 'blue'
+                ctx.fill()
+            }
+        }
+
+        // 随机生成若干个小球
+        const balls = []
+        while (balls.length < 40) {
+            const radius = Math.random() * 20 + 10 // 10 ~ 30
+            const x = Math.random() * (canvas.width - radius - radius) + radius
+            const y = Math.random() * (canvas.height - radius - radius) + radius
+
+            let flag = true
+            for (let i = 0; i < balls.length; i++) {
+                const dx = x - balls[i].x
+                const dy = y - balls[i].y
+                const dl = Math.sqrt(dx * dx + dy * dy)
+                if (dl <= radius + balls[i].radius) {
+                    flag = false
+                }
+            }
+            if (flag) {
+                balls.push(new Ball(x, y, radius))
+            }
+        }
+
+        function drawFrame() {
+            window.requestAnimationFrame(drawFrame, canvas)
+            canvas.height = canvas.height // 清空画布
+
+            // 绘制墙壁
+            ctx.strokeRect(0, 0, canvas.width, canvas.height)
+
+            for (let i = 0; i < balls.length; i++) {
+                const ball = balls[i]
+
+                // 判断小球间的碰撞
+                for (let j = i + 1; j < balls.length; j++) {
+                    const dx = ball.x - balls[j].x
+                    const dy = ball.y - balls[j].y
+                    const dl = Math.sqrt(dx * dx + dy * dy)
+                    if (dl <= ball.radius + balls[j].radius) {
+                        ball.flag === false ? ball.angle = ball.angle - 180 : ''
+                        balls[j].flag === false ? balls[j].angle = balls[j].angle - 180 : ''
+                        ball.flag = balls[j].flag = true
+                        // const tempAngle = ball.angle
+                        // ball.flag === false ? ball.angle = balls[j].angle : ''
+                        // balls[j].flag === false ? balls[j].angle = balls[j].angle : ''
+                        // ball.flag = balls[j].flag = true
+                    }
+                }
+
+                // 判断与墙壁的碰撞反弹
+                if (ball.flag === false) {
+                    if (ball.x + ball.radius > canvas.width) {
+                        ball.angle = 180 - ball.angle
+                    }
+                    if (ball.x - ball.radius < 0) {
+                        ball.angle = -(180 + ball.angle)
+                    }
+                    if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
+                        ball.angle = -ball.angle
+                    }
+                }
+
+                // 计算小球下一帧的坐标
+                ball.x += ball.speed * Math.cos(ball.angle * Math.PI / 180)
+                ball.y -= ball.speed * Math.sin(ball.angle * Math.PI / 180)
+
+                // 绘制
+                ball.draw(ctx)
+                ball.flag = false
+            }
+        }
+
+        drawFrame()
+
+    </script>
+</body>
+
+</html>

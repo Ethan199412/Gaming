@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,13 +13,14 @@
         }
     </style>
 </head>
+
 <body>
     <canvas id="myCanvas" width="600" height="400"></canvas>
     <script>
         const canvas = document.getElementById('myCanvas');
         const ctx = canvas.getContext('2d');
         const circles = [];
-        const numCircles = 10;
+        const numCircles = 50;
         const circleRadius = 20;
 
         // Create random circles
@@ -29,7 +31,8 @@
                 dx: (Math.random() - 0.5) * 4,  // Random horizontal speed
                 dy: (Math.random() - 0.5) * 4,  // Random vertical speed
                 radius: circleRadius,
-                color: getRandomColor()
+                color: getRandomColor(),
+                flag: false
             };
             circles.push(circle);
         }
@@ -68,33 +71,40 @@
             for (let i = 0; i < circles.length; i++) {
                 let circle = circles[i];
 
-                // Bounce off the edges of the canvas
-                if (circle.x + circle.radius > canvas.width || circle.x - circle.radius < 0) {
-                    circle.dx = -circle.dx;
+                // Check for collisions with other circles
+                for (let j = i + 1; j < circles.length; j++) {
+                    let otherCircle = circles[j];
+                    if (detectCollision(circle, otherCircle)) {
+                        if (circle.flag == false) {
+                            // Exchange velocities for a simple collision response
+                            let tempDx = circle.dx;
+                            let tempDy = circle.dy;
+                            circle.dx = otherCircle.dx;
+                            circle.dy = otherCircle.dy;
+                            otherCircle.dx = tempDx;
+                            otherCircle.dy = tempDy;
+                        }
+                        circle.flag = true
+                        otherCircle.flag = true
+                    }
                 }
-                if (circle.y + circle.radius > canvas.height || circle.y - circle.radius < 0) {
-                    circle.dy = -circle.dy;
+
+                if (circle.flag == false) {
+                    // Bounce off the edges of the canvas
+                    if (circle.x + circle.radius > canvas.width || circle.x - circle.radius < 0) {
+                        circle.dx = -circle.dx;
+                    }
+                    if (circle.y + circle.radius > canvas.height || circle.y - circle.radius < 0) {
+                        circle.dy = -circle.dy;
+                    }
                 }
 
                 // Move the circle
                 circle.x += circle.dx;
                 circle.y += circle.dy;
 
-                // Check for collisions with other circles
-                for (let j = i + 1; j < circles.length; j++) {
-                    let otherCircle = circles[j];
-                    if (detectCollision(circle, otherCircle)) {
-                        // Exchange velocities for a simple collision response
-                        let tempDx = circle.dx;
-                        let tempDy = circle.dy;
-                        circle.dx = otherCircle.dx;
-                        circle.dy = otherCircle.dy;
-                        otherCircle.dx = tempDx;
-                        otherCircle.dy = tempDy;
-                    }
-                }
-
                 drawCircle(circle);
+                circle.flag = false
             }
         }
 
@@ -107,4 +117,5 @@
         animate();
     </script>
 </body>
+
 </html>

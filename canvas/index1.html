@@ -16,31 +16,53 @@
 </head>
 
 <body>
-    <canvas id="myCanvas" width="400" height="300"></canvas>
+    <canvas id="myCanvas" width="600" height="400"></canvas>
     <script>
         const canvas = document.getElementById('myCanvas');
         const ctx = canvas.getContext('2d');
         const circleRadius = 20
 
-        function genCircle() {
-            return {
+        function genCircle(circles) {
+            const newCircle = {
                 x: Math.random() * (canvas.width - 2 * circleRadius) + circleRadius,
                 y: Math.random() * (canvas.height - 2 * circleRadius) + circleRadius,
-                dx: (Math.random() - 0.5) * 5,  // Random horizontal speed
-                dy: (Math.random() - 0.5) * 5,  // Random vertical speed
+                dx: (Math.random() - 0.5) * 4,  // Random horizontal speed
+                dy: (Math.random() - 0.5) * 4,  // Random vertical speed
                 radius: circleRadius,
-                color: getRandomColor()
+                color: getRandomColor(),
+                alreadyChangedirectionFlag: false
             };
+
         }
 
         function genCircles(n) {
             const circles = []
-            for (let i = 0; i < n; i++) {
-                circles.push(genCircle())
+            while (circles.length < n) {
+                let isValid = true
+                const newCircle = {
+                    x: Math.random() * (canvas.width - 2 * circleRadius) + circleRadius,
+                    y: Math.random() * (canvas.height - 2 * circleRadius) + circleRadius,
+                    dx: (Math.random() - 0.5) * 4,  // Random horizontal speed
+                    dy: (Math.random() - 0.5) * 4,  // Random vertical speed
+                    radius: circleRadius,
+                    color: getRandomColor(),
+                    alreadyChangedirectionFlag: false
+                };
+                for (const circle of circles) {
+                    const { x, y } = circle
+
+                    const distance = (Math.abs(circle.x - newCircle.x) ** 2 + Math.abs(circle.y - newCircle.y) ** 2) ** 0.5
+                    if (distance < circle.radius + newCircle.radius) {
+                        isValid = false
+                        break
+                    }
+                }
+                if (isValid) {
+                    circles.push(newCircle)
+                }
             }
             return circles
         }
-        const circles = genCircles(10)
 
         function getRandomColor() {
             const letters = '0123456789ABCDEF';
@@ -73,67 +95,49 @@
 
         function updateCircles(circles) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+
             for (let i = 0; i < circles.length; i++) {
                 const circle = circles[i]
-                // console.log('[p1.0] circle', circle)
-                let { x, y, dx, dy, radius } = circle
-                if (x + radius >= canvas.width || x - radius <= 0) {
-                    dx = -dx
-                }
-
-                if (y + radius >= canvas.height || y - radius <= 0) {
-                    dy = -dy
-                }
-
-                x += dx
-                y += dy
-                circle.x = x
-                circle.y = y
-                circle.dx = dx
-                circle.dy = dy
 
                 for (let j = i + 1; j < circles.length; j++) {
                     const otherCircle = circles[j]
                     if (detectCollision(circle, otherCircle)) {
-                        let { dx: c1dx, dy: c1dy, radius } = circle
-                        let { dx: c2dx, dy: c2dy } = otherCircle
-
-                        if (Math.abs(c1dx - c2dx) < 0.1) {
-                            if (x + 2 * radius <= canvas.width) {
-                                x += 2 * radius
-                                circle.x = x
-                            }
+                        if (circle.alreadyChangedirectionFlag == false) {
+                            // let tempDx = circle.dx;
+                            // let tempDy = circle.dy;
+                            circle.dx = -circle.dx ;
+                            circle.dy = -circle.dy ;
                         }
 
-                        if (Math.abs(c1dy - c2dy) < 0.1) {
-                            if (y + 2 * radius <= canvas.height) {
-                                y += 2 * radius
-                                circle.y = y
-                            }
+                        if(otherCircle.alreadyChangedirectionFlag == false){
+                            otherCircle.dx = -otherCircle.dx ;
+                            otherCircle.dy = -otherCircle.dy;
                         }
-
-                        // if (Math.abs(c1dy - c2dy) < 0.01) {
-                        //     c1dy += 0.1
-                        //     c2dy -= 0.1
-                        // }
-
-                        circle.dx = c2dx
-                        circle.dy = c2dy
-
-                        otherCircle.dx = c1dx
-                        otherCircle.dy = c2dy
+                        circle.alreadyChangedirectionFlag = otherCircle.alreadyChangedirectionFlag = true
                     }
                 }
-                drawCircle({ ...circle })
+                if (circle.alreadyChangedirectionFlag == false) {
+                    if (circle.x + circle.radius >= canvas.width || circle.x - circle.radius <= 0) {
+                        circle.dx = -circle.dx
+                    }
+
+                    if (circle.y + circle.radius >= canvas.height || circle.y - circle.radius <= 0) {
+                        circle.dy = -circle.dy
+                    }
+                }
+
+                circle.x += circle.dx
+                circle.y += circle.dy
+
+                drawCircle(circle)
+                circle.alreadyChangedirectionFlag = false
             }
         }
 
-        // drawCircle(circle)
         let i = 0;
+        const circles = genCircles(50)
+
         function animate() {
-            // if (i > 3) {
-            //     return
-            // }
             updateCircles(circles)
             requestAnimationFrame(animate)
             i++
