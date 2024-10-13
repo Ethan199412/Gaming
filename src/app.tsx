@@ -46,8 +46,6 @@ const strategies = [
 //   // console.log(entity1.strategy, entity1.getAllScore())
 // }
 
-
-
 const App = () => {
   const [gamingEntities1, setGamingEntities1] = useState<GamingEntity[]>([]);
   const [gamingEntities2, setGamingEntities2] = useState<GamingEntity[]>([]);
@@ -56,29 +54,21 @@ const App = () => {
   return (
     <div className="gaming-container">
       <h1>What is the optimal strategy in the iterated prisoner's dilemma?</h1>
-      <BattleConfiger 
+      <BattleConfiger
         gamingEntities1={gamingEntities1}
         gamingEntities2={gamingEntities2}
         setBattleId={setBattleId}
         battleId={battleId}
       />
       <div className="flex gaming-group-container">
-        <div className="group-1-container gaming-entity-container">          
-          <BattleGroup
-            title='group 1'
-            gamingEntities={gamingEntities1}
-            setGamingEntities={setGamingEntities1}
-          />
+        <div className="group-1-container gaming-entity-container">
+          <BattleGroup title="group 1" gamingEntities={gamingEntities1} setGamingEntities={setGamingEntities1} />
         </div>
         <div className="group-2-container gaming-entity-container">
-          <BattleGroup
-            title='group 2'
-            gamingEntities={gamingEntities2}
-            setGamingEntities={setGamingEntities2}
-          />
+          <BattleGroup title="group 2" gamingEntities={gamingEntities2} setGamingEntities={setGamingEntities2} />
         </div>
       </div>
-      <BattleTable gamingEnitities={gamingEntities1} competitors={gamingEntities2}/>
+      <BattleTable gamingEnitities={gamingEntities1} competitors={gamingEntities2} />
     </div>
   );
 };

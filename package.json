@@ -10,6 +10,7 @@
     "build-dev": "webpack --config ./webpack/webpack.dev.config.js",
     "build-dll": "webpack --config ./webpack/webpack.dll.config.js",
     "format": "prettier --write ./src/.",
+    "check-format": "prettier --check ./src/.",
     "prepare": "husky install"
   },
   "author": "",

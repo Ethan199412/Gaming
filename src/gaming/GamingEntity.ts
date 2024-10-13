@@ -63,7 +63,7 @@ export class GamingEntity {
 
   getAllScore() {
     const map: Record<string, number> = {};
-    console.log('[p2.2] competitorId',this, this.competitorMappings)
+    console.log('[p2.2] competitorId', this, this.competitorMappings);
     for (const competitorId in this.competitorMappings) {
       const scores = this.scoreMappings[competitorId];
       const score = scores.reduce((sum, next) => sum + next, 0);

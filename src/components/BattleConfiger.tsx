@@ -10,7 +10,7 @@ interface IProps {
   gamingEntities1: GamingEntity[];
   gamingEntities2: GamingEntity[];
   setBattleId: (battleId: number) => any;
-  battleId: number
+  battleId: number;
 }
 
 export default function BattleConfiger(props: IProps) {
@@ -24,7 +24,7 @@ export default function BattleConfiger(props: IProps) {
         battleManager.battle(entity1, entity2, battleTimes);
       }
     }
-    setBattleId(battleId+1)
+    setBattleId(battleId + 1);
   };
   return (
     <div className="battle-configer-container">
