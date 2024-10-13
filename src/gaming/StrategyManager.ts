@@ -1,5 +1,5 @@
-import { GamingEntity } from "./gamingEntity";
-import { Action, Score, Strategy } from "./types";
+import { GamingEntity } from './GamingEntity';
+import { Action, Score, Strategy } from './types';
 
 interface IOptions {
   // competitorActions?: Action[],
@@ -36,10 +36,7 @@ class StrategyManager {
       case Strategy.CunningProber:
         const { length } = myScore;
         if (length >= 2) {
-          if (
-            myScore[length - 1] == Score.BothLose &&
-            myScore[length - 2] == Score.BothLose
-          ) {
+          if (myScore[length - 1] == Score.BothLose && myScore[length - 2] == Score.BothLose) {
             return Action.Cooperate;
           }
         }

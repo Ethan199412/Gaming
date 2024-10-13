@@ -1,6 +1,6 @@
-import idManager from "./IdManager";
-import strategyManager from "./StrategyManager";
-import { Action, Score, Strategy } from "./types";
+import idManager from './IdManager';
+import strategyManager from './StrategyManager';
+import { Action, Score, Strategy } from './types';
 
 export class GamingEntity {
   id: string;
@@ -31,11 +31,13 @@ export class GamingEntity {
     if (!this.competitorMappings[competitorId]) {
       this.competitorMappings[competitorId] = competitor;
     }
+    if (!this.heFucksMeMappings[competitorId]) {
+      this.heFucksMeMappings[competitorId] = false;
+    }
   }
 
   generateNextAction(competitorId: string) {
-    const competitorActions: Action[] =
-      this.competitorMappings[competitorId].actionMappings[this.id];
+    const competitorActions: Action[] = this.competitorMappings[competitorId].actionMappings[this.id];
     const action = strategyManager.generateNextAction(this.strategy, {
       // competitorActions,
       // heFucksMe: this.heFucksMeMappings[competitorId],
@@ -61,6 +63,7 @@ export class GamingEntity {
 
   getAllScore() {
     const map: Record<string, number> = {};
+    console.log('[p2.2] competitorId',this, this.competitorMappings)
     for (const competitorId in this.competitorMappings) {
       const scores = this.scoreMappings[competitorId];
       const score = scores.reduce((sum, next) => sum + next, 0);

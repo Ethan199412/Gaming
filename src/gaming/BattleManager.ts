@@ -1,5 +1,5 @@
-import { GamingEntity } from "./GamingEntity";
-import { Action, Score } from "./types";
+import { GamingEntity } from './GamingEntity';
+import { Action, Score } from './types';
 
 class BattleManager {
   private initBattle(entity1: GamingEntity, entity2: GamingEntity) {
@@ -14,22 +14,13 @@ class BattleManager {
       const entity2Action = entity2.generateNextAction(entity1.id);
 
       let entity1Score, entity2Score;
-      if (
-        entity1Action == Action.Cooperate &&
-        entity2Action == Action.Cooperate
-      ) {
+      if (entity1Action == Action.Cooperate && entity2Action == Action.Cooperate) {
         entity1Score = Score.BothWin;
         entity2Score = Score.BothWin;
-      } else if (
-        entity1Action == Action.Fight &&
-        entity2Action == Action.Cooperate
-      ) {
+      } else if (entity1Action == Action.Fight && entity2Action == Action.Cooperate) {
         entity1Score = Score.WinOther;
         entity2Score = Score.Loser;
-      } else if (
-        entity1Action == Action.Cooperate &&
-        entity2Action == Action.Fight
-      ) {
+      } else if (entity1Action == Action.Cooperate && entity2Action == Action.Fight) {
         entity1Score = Score.Loser;
         entity2Score = Score.WinOther;
       } else {

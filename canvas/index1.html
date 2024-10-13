@@ -42,8 +42,8 @@
                 const newCircle = {
                     x: Math.random() * (canvas.width - 2 * circleRadius) + circleRadius,
                     y: Math.random() * (canvas.height - 2 * circleRadius) + circleRadius,
-                    dx: (Math.random() - 0.5) * 4,  // Random horizontal speed
-                    dy: (Math.random() - 0.5) * 4,  // Random vertical speed
+                    dx: (Math.random() - 0.5) * 5,  // Random horizontal speed
+                    dy: (Math.random() - 0.5) * 5,  // Random vertical speed
                     radius: circleRadius,
                     color: getRandomColor(),
                     alreadyChangedirectionFlag: false
@@ -135,7 +135,7 @@
         }
 
         let i = 0;
-        const circles = genCircles(50)
+        const circles = genCircles(10)
 
         function animate() {
             updateCircles(circles)
