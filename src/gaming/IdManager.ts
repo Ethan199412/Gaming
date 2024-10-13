@@ -1,9 +1,9 @@
 class IdManager {
-    private id: number = 0;
-    public initNewId() {
-        this.id += 1;
-        return this.id
-    }
+  private id: number = 0;
+  public initNewId() {
+    this.id += 1;
+    return this.id;
+  }
 }
 
-export default new IdManager()
+export default new IdManager();

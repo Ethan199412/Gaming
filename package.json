@@ -8,7 +8,8 @@
     "dev": "webpack-dev-server --hot --color --open --config ./webpack/webpack.dev.config.js",
     "build": "webpack --config ./webpack/webpack.production.config.js",
     "build-dev": "webpack --config ./webpack/webpack.dev.config.js",
-    "build-dll": "webpack --config ./webpack/webpack.dll.config.js"
+    "build-dll": "webpack --config ./webpack/webpack.dll.config.js",
+    "format": "prettier --write ./src/."
   },
   "author": "",
   "license": "ISC",

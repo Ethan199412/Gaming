@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import "./app.less";
-import { mult, pow } from "./utils";
 import axios from "axios";
 // import 'antd/dist/antd.css';
 import { Button, Form, Input, InputNumber, Select } from "antd";
