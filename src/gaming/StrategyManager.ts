@@ -14,6 +14,8 @@ class StrategyManager {
     const competitorActions = competitor.actionMappings[me.id];
     const heFucksMe = me.heFucksMeMappings[competitor.id];
     const myScore = me.scoreMappings[competitor.id];
+    const myAction = me.actionMappings[competitor.id];
+    const hisAction = competitor.actionMappings[me.id];
 
     switch (strategy) {
       case Strategy.Eagle:
@@ -34,9 +36,14 @@ class StrategyManager {
         }
         return Action.Cooperate;
       case Strategy.CunningProber:
-        const { length } = myScore;
+        const { length } = myAction;
         if (length >= 2) {
-          if (myScore[length - 1] == Score.BothLose && myScore[length - 2] == Score.BothLose) {
+          if (
+            myAction[length - 1] == Action.Fight &&
+            hisAction[length - 1] == Action.Fight &&
+            myAction[length - 2] == Action.Fight &&
+            hisAction[length - 2] == Action.Fight
+          ) {
             return Action.Cooperate;
           }
         }

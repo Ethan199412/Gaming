@@ -52,10 +52,13 @@ const App = () => {
   const [battleId, setBattleId] = useState<number>(0);
 
   const onCopy = () => {
-    const copiedEntities = [];
+    const copiedEntities: GamingEntity[] = [];
     for (const gamingEntity of gamingEntities1) {
       const { strategy } = gamingEntity;
+      const newEntity = new GamingEntity(strategy);
+      copiedEntities.push(newEntity);
     }
+    setGamingEntities2(copiedEntities);
   };
 
   return (
@@ -72,7 +75,14 @@ const App = () => {
           <BattleGroup title="group 1" gamingEntities={gamingEntities1} setGamingEntities={setGamingEntities1} />
         </div>
         <div className="group-2-container gaming-entity-container">
-          <BattleGroup title="group 2" gamingEntities={gamingEntities2} setGamingEntities={setGamingEntities2} />
+          <BattleGroup
+            title="group 2"
+            gamingEntities={gamingEntities2}
+            setGamingEntities={setGamingEntities2}
+            copiedEntities={gamingEntities1}
+            copiedName="group1"
+            onCopy={onCopy}
+          />
         </div>
       </div>
       <BattleTable gamingEnitities={gamingEntities1} competitors={gamingEntities2} />

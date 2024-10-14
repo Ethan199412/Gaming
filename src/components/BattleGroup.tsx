@@ -18,13 +18,13 @@ interface IProps {
   title: string;
   gamingEntities: GamingEntity[];
   setGamingEntities: (gamingEntities: GamingEntity[]) => any;
-  supportCopy?: boolean;
+  copiedEntities?: GamingEntity[];
   copiedName?: string;
   onCopy?: (...any) => any;
 }
 
 export default function BattleGroup(props: IProps) {
-  const { title, gamingEntities, setGamingEntities, supportCopy, copiedName, onCopy } = props;
+  const { title, gamingEntities, setGamingEntities, copiedEntities = [], copiedName, onCopy } = props;
 
   const onAdd = (value: any) => {
     console.log('[p1.0] value', value);
@@ -70,7 +70,7 @@ export default function BattleGroup(props: IProps) {
             add
           </Button>
         </Item>
-        {supportCopy && (
+        {copiedEntities.length > 0 && (
           <Item>
             <Button onClick={onCopy}>{`copy from ${copiedName}`}</Button>
           </Item>
