@@ -19,15 +19,12 @@ interface IProps {
   gamingEntities: GamingEntity[];
   setGamingEntities: (gamingEntities: GamingEntity[]) => any;
   supportCopy?: boolean;
-  copiedEntities: GamingEntity[];
+  copiedName?: string;
   onCopy?: (...any) => any;
 }
 
 export default function BattleGroup(props: IProps) {
-  const { title, gamingEntities, setGamingEntities } = props;
-  // const [gamingEntities, setGamingEntities] = useState<GamingEntity[]>([]);
-
-  // console.log('[p1.0] gamingEntities', gamingEntities);
+  const { title, gamingEntities, setGamingEntities, supportCopy, copiedName, onCopy } = props;
 
   const onAdd = (value: any) => {
     console.log('[p1.0] value', value);
@@ -58,14 +55,14 @@ export default function BattleGroup(props: IProps) {
         }}
         onFinish={onAdd}
       >
-        <Item label="Strategy" name="strategy" required>
+        <Item label="Strategy" name="strategy" required={true}>
           <Select
             style={{ width: 200 }}
             options={strategyList}
             // defaultValue={Strategy.Eagle}
           ></Select>
         </Item>
-        <Item label="Number" name="number" required>
+        <Item label="Number" name="number" required={true}>
           <InputNumber style={{ width: 100 }} />
         </Item>
         <Item>
@@ -73,6 +70,11 @@ export default function BattleGroup(props: IProps) {
             add
           </Button>
         </Item>
+        {supportCopy && (
+          <Item>
+            <Button onClick={onCopy}>{`copy from ${copiedName}`}</Button>
+          </Item>
+        )}
         <Item>
           <Button onClick={onClear}>clear</Button>
         </Item>

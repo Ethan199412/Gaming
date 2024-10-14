@@ -51,6 +51,13 @@ const App = () => {
   const [gamingEntities2, setGamingEntities2] = useState<GamingEntity[]>([]);
   const [battleId, setBattleId] = useState<number>(0);
 
+  const onCopy = () => {
+    const copiedEntities = [];
+    for (const gamingEntity of gamingEntities1) {
+      const { strategy } = gamingEntity;
+    }
+  };
+
   return (
     <div className="gaming-container">
       <h1>What is the optimal strategy in the iterated prisoner's dilemma?</h1>
