@@ -26,7 +26,6 @@ const strategies = [
   Strategy.TitForTat,
 ];
 
-
 const App = () => {
   const [gamingEntities1, setGamingEntities1] = useState<GamingEntity[]>([]);
   const [gamingEntities2, setGamingEntities2] = useState<GamingEntity[]>([]);
