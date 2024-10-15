@@ -2,7 +2,8 @@
     "include": [
         "src/**/*.ts",
         "src/**/*.d.ts",
-        "index.d.ts"
+        "index.d.ts", 
+        "src/components/BattleGroup.tsx"    
     ],
     "compilerOptions": {
         "outDir": "./dist/",

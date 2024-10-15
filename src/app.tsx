@@ -26,25 +26,6 @@ const strategies = [
   Strategy.TitForTat,
 ];
 
-// function generateEntities(stategies: Strategy[]) {
-//   const entities: GamingEntity[] = [];
-//   for (const strategy of stategies) {
-//     entities.push(new GamingEntity(strategy));
-//   }
-//   return entities;
-// }
-// const entities = generateEntities(strategies);
-// const competitors = generateEntities(strategies);
-
-// for (const entity1 of entities) {
-//   for (const entity2 of competitors) {
-//     battleManager.battle(entity1, entity2, 20);
-//   }
-// }
-
-// for (const entity1 of entities) {
-//   // console.log(entity1.strategy, entity1.getAllScore())
-// }
 
 const App = () => {
   const [gamingEntities1, setGamingEntities1] = useState<GamingEntity[]>([]);
